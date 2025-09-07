@@ -5,6 +5,7 @@ services:
     image: postgres:17.6
     restart: always
     environment:
+      POSTGRES_DB: education
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
