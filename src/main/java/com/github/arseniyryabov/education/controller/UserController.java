@@ -15,10 +15,7 @@ public class UserController {
 
     @PostMapping("/user")
     public  ResponseEntity<UserResponse> addUser(@RequestBody UserCreatingRequest userCreatingRequest) {
-
-
         UserResponse userResponse = new UserResponse(userCreatingRequest.getName(), userCreatingRequest.getLastName(), userCreatingRequest.getSecondName());
-
         return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
     }
 

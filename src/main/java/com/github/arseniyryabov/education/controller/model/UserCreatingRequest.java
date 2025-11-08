@@ -8,7 +8,8 @@ public class UserCreatingRequest {
     private String secondName;
 
 
-    public UserCreatingRequest() {}
+    public UserCreatingRequest() {
+    }
 
     public UserCreatingRequest(String lastName, String name, String secondName) {
         this.lastName = lastName;

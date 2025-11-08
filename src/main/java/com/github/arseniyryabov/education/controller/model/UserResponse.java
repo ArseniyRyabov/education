@@ -6,7 +6,8 @@ public class UserResponse {
     private String secondName;
 
 
-    public UserResponse() {}
+    public UserResponse() {
+    }
 
     public UserResponse(String name, String lastName, String secondName) {
         this.name = name;
