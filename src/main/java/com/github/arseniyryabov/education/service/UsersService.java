@@ -16,9 +16,8 @@ public class UsersService {
     public Long create(UserCreatingRequest request) {
         UserEntity userEntity = new UserEntity();
         userEntity.setLastName(request.getLastName());
-        userEntity.setName(request.getName());
+        userEntity.setUserName(request.getUserName());
         userEntity.setSecondName(request.getSecondName());
-
         UserEntity savedUser = userRepository.save(userEntity);
         return savedUser.getId();
     }

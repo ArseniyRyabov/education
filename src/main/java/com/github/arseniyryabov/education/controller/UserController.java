@@ -16,20 +16,16 @@ public class UserController {
     private UsersService usersService;
 
     @GetMapping("/user")
-    public String getUser() {
+    public String getAll() {
         return "Список пользователей";
     }
 
     @PostMapping("/user")
-    public ResponseEntity<UserResponse> addUser(@RequestBody UserCreatingRequest userCreatingRequest) {
-        UserResponse userResponse = new UserResponse(userCreatingRequest.getName(), userCreatingRequest.getLastName(), userCreatingRequest.getSecondName());
-        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
+    public ResponseEntity<Long> create(@RequestBody UserCreatingRequest userCreatingRequest) {
+        Long userId = usersService.create(userCreatingRequest);
+        return new ResponseEntity<>(userId, HttpStatus.CREATED);
     }
 
-    @PostMapping("/user_id")
-    public ResponseEntity<Long> addUserId(@RequestBody UserCreatingRequest request) {
-        Long userId = usersService.create(request);
-        return ResponseEntity.ok(userId);
-    }
+
 
 }

@@ -7,20 +7,26 @@ import jakarta.persistence.*;
 
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
-    @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my-generator")
+    @SequenceGenerator(name = "my-generator", sequenceName = "user_id_sequence", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "last_name")
     private String lastName;
-    private String name;
+
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "second_name")
     private String secondName;
 
     public UserEntity() {
     }
 
-    public UserEntity(String lastName, String name, String secondName) {
+    public UserEntity(String lastName, String userName, String secondName) {
         this.lastName = lastName;
-        this.name = name;
+        this.userName = userName;
         this.secondName = secondName;
     }
 
@@ -40,12 +46,12 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getSecondName() {

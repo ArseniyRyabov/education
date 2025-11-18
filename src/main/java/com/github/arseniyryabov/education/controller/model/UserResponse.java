@@ -1,7 +1,7 @@
 package com.github.arseniyryabov.education.controller.model;
 
 public class UserResponse {
-    private String name;
+    private String userName;
     private String lastName;
     private String secondName;
 
@@ -9,8 +9,8 @@ public class UserResponse {
     public UserResponse() {
     }
 
-    public UserResponse(String name, String lastName, String secondName) {
-        this.name = name;
+    public UserResponse(String userName, String lastName, String secondName) {
+        this.userName = userName;
         this.lastName = lastName;
         this.secondName = secondName;
     }
@@ -23,12 +23,12 @@ public class UserResponse {
         this.lastName = lastName;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getSecondName() {
