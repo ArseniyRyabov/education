@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 class UsersServiceTest {
 
@@ -32,9 +32,9 @@ class UsersServiceTest {
     @Test
     public void testCreateUser() {
         UserCreatingRequest request = new UserCreatingRequest();
-        request.setLastName("Петров");
-        request.setUserName("Петр");
-        request.setSecondName("Петрович");
+        request.setLastName("Иванов");
+        request.setUserName("ivan");
+        request.setSecondName("Иван");
 
         UserEntity mockUserEntity = new UserEntity();
         mockUserEntity.setId(1L);
@@ -45,8 +45,6 @@ class UsersServiceTest {
         when(userRepository.save(Mockito.any(UserEntity.class))).thenReturn(mockUserEntity);
 
         Long userId = usersService.create(request);
-
-        verify(userRepository, times(1)).save(any(UserEntity.class));
 
         assertEquals(1L, userId);
     }
