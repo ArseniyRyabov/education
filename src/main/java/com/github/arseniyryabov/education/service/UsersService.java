@@ -2,12 +2,12 @@ package com.github.arseniyryabov.education.service;
 
 import com.github.arseniyryabov.education.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.
+stereotype.Service;
 import com.github.arseniyryabov.education.entity.UserEntity;
 import com.github.arseniyryabov.education.controller.model.UserCreatingRequest;
 
 import java.util.List;
-
 @Service
 public class UsersService {
     @Autowired

@@ -14,6 +14,10 @@ public class UserCreatingRequest {
         this.secondName = secondName;
     }
 
+    public UserCreatingRequest(){
+
+    }
+
     public String getLastName() {
         return lastName;
     }
