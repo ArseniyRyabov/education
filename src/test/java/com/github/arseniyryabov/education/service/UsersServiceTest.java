@@ -33,8 +33,8 @@ class UsersServiceTest {
     public void testCreateUser() {
         UserCreatingRequest request = new UserCreatingRequest();
         request.setLastName("Иванов");
-        request.setUserName("ivan");
-        request.setSecondName("Иван");
+        request.setUserName("Иван");
+        request.setSecondName("Иванович");
 
         UserEntity mockUserEntity = new UserEntity();
         mockUserEntity.setId(1L);
