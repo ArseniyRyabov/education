@@ -32,8 +32,8 @@ class UsersServiceTest {
     @Test
     public void testCreateUser() {
         UserCreatingRequest request = new UserCreatingRequest();
-        request.setLastName("Иванов");
-        request.setUserName("Иван");
+        request.setLastName("Петров");
+        request.setUserName("Петр");
         request.setSecondName("Иванович");
 
         UserEntity mockUserEntity = new UserEntity();
