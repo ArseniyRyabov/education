@@ -4,17 +4,18 @@ package com.github.arseniyryabov.education.controller.model;
 public class UserCreatingRequest {
 
     private String lastName;
-    private String name;
+    private String userName;
     private String secondName;
 
 
-    public UserCreatingRequest() {
+    public UserCreatingRequest(String lastName, String userName, String secondName) {
+        this.lastName = lastName;
+        this.userName = userName;
+        this.secondName = secondName;
     }
 
-    public UserCreatingRequest(String lastName, String name, String secondName) {
-        this.lastName = lastName;
-        this.name = name;
-        this.secondName = secondName;
+    public UserCreatingRequest(){
+
     }
 
     public String getLastName() {
@@ -25,12 +26,12 @@ public class UserCreatingRequest {
         this.lastName = lastName;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String name) {
+        this.userName = userName;
     }
 
     public String getSecondName() {
