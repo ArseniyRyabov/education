@@ -34,7 +34,7 @@ class UsersServiceTest {
         UserCreatingRequest request = new UserCreatingRequest();
         request.setLastName("Петров");
         request.setUserName("Петр");
-        request.setSecondName("Иванович");
+        request.setSecondName("Петрович");
 
         UserEntity mockUserEntity = new UserEntity();
         mockUserEntity.setId(1L);
