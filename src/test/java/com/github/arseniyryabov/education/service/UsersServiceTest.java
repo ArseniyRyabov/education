@@ -1,10 +1,10 @@
 package com.github.arseniyryabov.education.service;
 
 import com.github.arseniyryabov.education.controller.model.UserCreatingRequest;
-import com.github.arseniyryabov.education.controller.model.UserResponse;
 import com.github.arseniyryabov.education.entity.UserEntity;
 import com.github.arseniyryabov.education.exceptions.UserNotFoundException;
 import com.github.arseniyryabov.education.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,16 +25,22 @@ class UsersServiceTest {
     @InjectMocks
     private UsersService usersService;
 
+    private AutoCloseable closeable;
+
     @BeforeEach
     public void setUp() {
-        try (var mocks = MockitoAnnotations.openMocks(this)) {
-        } catch (Exception e) {
-            e.printStackTrace();
+        closeable = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        if (closeable != null) {
+            closeable.close();
         }
     }
 
     @Test
-    public void testCreateUser() {
+    public void testCreate() {
         UserCreatingRequest request = new UserCreatingRequest();
         request.setLastName("Петров");
         request.setUserName("Петр");
@@ -48,37 +54,41 @@ class UsersServiceTest {
 
         when(userRepository.save(Mockito.any(UserEntity.class))).thenReturn(mockUserEntity);
 
-        Long userId = usersService.create(request);
+        Long id = usersService.create(request);
 
         verify(userRepository, times(1)).save(any(UserEntity.class));
 
-        assertEquals(1L, userId);
+        assertEquals(1L, id);
     }
 
     @Test
-    public void testGetUserById_UserExists() {
-        UserEntity userEntity = new UserEntity("Иванов", "Иван", "Иванович");
-        userEntity.setId(1L);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
+    public void testGetById() {
+        Long id = 1L;
+        UserEntity mockUser = new UserEntity(id, "lastName", "userName", "secondName");
 
-        UserResponse userResponse = usersService.getUserById(1L);
+        when(userRepository.findById(id)).thenReturn(Optional.of(mockUser));
 
-        assertNotNull(userResponse);
-        assertEquals("Иван", userResponse.getUserName());
-        assertEquals("Иванов", userResponse.getLastName());
-        assertEquals("Иванович", userResponse.getSecondName());
+        UserEntity foundUser = usersService.getById(id);
+
+        assertNotNull(foundUser);
+        assertEquals(mockUser.getId(), foundUser.getId());
+        assertEquals(mockUser.getUserName(), foundUser.getUserName());
+        assertEquals(mockUser.getLastName(), foundUser.getLastName());
+        assertEquals(mockUser.getSecondName(), foundUser.getSecondName());
+
+        verify(userRepository, times(1)).findById(id);
     }
 
     @Test
-    public void testGetUserById_UserNotFound() {
-        when(userRepository.findById(2L)).thenReturn(Optional.empty());
+    public void testGetById_ThrowsException_WhenUserNotFound() {
+        Long id = 2L;
 
-        Exception exception = assertThrows(UserNotFoundException.class, () -> {
-            usersService.getUserById(2L);
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> {
+            usersService.getById(id);
         });
 
-        assertEquals("Пользователь с ID 2 не найден", exception.getMessage());
+        verify(userRepository, times(1)).findById(id);
     }
-
-
 }

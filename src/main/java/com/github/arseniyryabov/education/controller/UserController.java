@@ -4,10 +4,17 @@ import com.github.arseniyryabov.education.controller.model.UserCreatingRequest;
 import com.github.arseniyryabov.education.entity.UserEntity;
 import com.github.arseniyryabov.education.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.github.arseniyryabov.education.controller.model.UserResponse;
+import com.github.arseniyryabov.education.repository.UserRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -16,14 +23,14 @@ public class UserController {
     @Autowired
     private UsersService usersService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        UserResponse userResponse = usersService.getUserById(id);
-        if (userResponse != null) {
-            return ResponseEntity.ok(userResponse);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
+        UserEntity userEntity = usersService.getById(id);
+        UserResponse userResponse = new UserResponse(userEntity.getId(), userEntity.getUserName(), userEntity.getLastName(), userEntity.getSecondName());
+        return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping
