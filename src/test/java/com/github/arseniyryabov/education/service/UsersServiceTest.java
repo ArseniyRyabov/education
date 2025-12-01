@@ -32,6 +32,8 @@ class UsersServiceTest {
         closeable = MockitoAnnotations.openMocks(this);
     }
 
+    //@BeforeEach public void setUp(){MockitoAnnotations.openMocks(this);}
+
     @AfterEach
     void tearDown() throws Exception {
         if (closeable != null) {
@@ -56,7 +58,7 @@ class UsersServiceTest {
 
         Long id = usersService.create(request);
 
-        verify(userRepository, times(1)).save(any(UserEntity.class));
+        verify(userRepository).save(any(UserEntity.class));
 
         assertEquals(1L, id);
     }
@@ -76,7 +78,7 @@ class UsersServiceTest {
         assertEquals(mockUser.getLastName(), foundUser.getLastName());
         assertEquals(mockUser.getSecondName(), foundUser.getSecondName());
 
-        verify(userRepository, times(1)).findById(id);
+        verify(userRepository).findById(id);
     }
 
     @Test
@@ -89,6 +91,6 @@ class UsersServiceTest {
             usersService.getById(id);
         });
 
-        verify(userRepository, times(1)).findById(id);
+        verify(userRepository).findById(id);
     }
 }
