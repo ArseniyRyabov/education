@@ -1,6 +1,5 @@
 package com.github.arseniyryabov.education.service;
 
-import com.github.arseniyryabov.education.controller.model.UserResponse;
 import com.github.arseniyryabov.education.exceptions.UserNotFoundException;
 import com.github.arseniyryabov.education.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import com.github.arseniyryabov.education.entity.UserEntity;
 import com.github.arseniyryabov.education.controller.model.UserCreatingRequest;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
@@ -31,10 +29,7 @@ public class UsersService {
                 .orElseThrow(() -> new UserNotFoundException("Пользователь с ID " + id + " не найден"));
     }
 
-    public List<UserResponse> getWithSortingAndPaginationForFilter(String lastName, int limit, int offset) {
-        List<UserEntity> users = userRepository.findWithSortingAndPagination(lastName, limit, offset);
-        return users.stream()
-                .map(user -> new UserResponse(user.getId(), user.getUserName(), user.getLastName(), user.getSecondName()))
-                .collect(Collectors.toList());
+    public List<UserEntity> getByFiltersWithPagination(String lastName, int limit, int offset) {
+        return userRepository.findWithPagination(lastName, limit, offset);
     }
 }

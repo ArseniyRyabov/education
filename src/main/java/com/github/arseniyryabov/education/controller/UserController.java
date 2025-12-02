@@ -11,6 +11,7 @@ import com.github.arseniyryabov.education.controller.model.UserResponse;
 import com.github.arseniyryabov.education.repository.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -36,11 +37,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getWithSortingAndPaginationForFilter(
+    public List<UserResponse> getByFiltersWithPagination(
             @RequestParam(required = false, defaultValue = "") String lastName,
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(defaultValue = "0") int offset) {
-        List<UserResponse> userResponses = usersService.getWithSortingAndPaginationForFilter(lastName, limit, offset);
-        return ResponseEntity.ok(userResponses);
+        List<UserEntity> users = usersService.getByFiltersWithPagination(lastName, limit, offset);
+        return users.stream()
+                .map(user -> new UserResponse(user.getId(), user.getUserName(), user.getLastName(), user.getSecondName()))
+                .collect(Collectors.toList());
     }
 }

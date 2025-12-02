@@ -4,7 +4,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.github.arseniyryabov.education.controller.model.UserResponse;
 import com.github.arseniyryabov.education.entity.UserEntity;
 import com.github.arseniyryabov.education.service.UsersService;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -23,13 +23,14 @@ import java.util.List;
 
 public class UserControllerTest {
 
+    @Autowired
+    private MockMvc mockMvc;
+
     @Mock
     private UsersService usersService;
 
     @InjectMocks
     private UserController userController;
-
-    private MockMvc mockMvc;
 
     private AutoCloseable closeable;
 
@@ -77,15 +78,15 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetWithSortingAndPaginationForFilter() throws Exception {
-        UserResponse user1 = new UserResponse(1L, "Иван", "Иванов", "Иванович");
-        UserResponse user2 = new UserResponse(2L, "Петр", "Петров", "Петрович");
-        List<UserResponse> userList = Arrays.asList(user1, user2);
+    public void testGetByFiltersWithPagination() throws Exception {
+        UserEntity user1 = new UserEntity(1L, "Иванов", "Иван", "Иванович");
+        UserEntity user2 = new UserEntity(2L, "Петров", "Петр", "Петрович");
+        List<UserEntity> users = Arrays.asList(user1, user2);
 
-        when(usersService.getWithSortingAndPaginationForFilter(any(String.class), any(int.class), any(int.class))).thenReturn(userList);
+        when(usersService.getByFiltersWithPagination("Иванов", 10, 0)).thenReturn(users);
 
         mockMvc.perform(get("/users")
-                        .param("lastName", "LastName")
+                        .param("lastName", "Иванов")
                         .param("limit", "10")
                         .param("offset", "0")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -93,6 +94,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[0].userName").value("Иван"))
                 .andExpect(jsonPath("$[1].userName").value("Петр"));
 
-        verify(usersService).getWithSortingAndPaginationForFilter("LastName", 10, 0);
+        verify(usersService).getByFiltersWithPagination("Иванов", 10, 0);
     }
 }

@@ -96,20 +96,4 @@ class UsersServiceTest {
         verify(userRepository).findById(id);
     }
 
-    @Test
-    public void testGetWithSortingAndPaginationForFilter() {
-        String lastName = "Иванов";
-        int limit = 10;
-        int offset = 0;
-        UserEntity user = new UserEntity(1L, "Иванов", "Иван", "Иванович");
-        when(userRepository.findWithSortingAndPagination(lastName, limit, offset))
-                .thenReturn(List.of(user));
-
-        List<UserResponse> result = usersService.getWithSortingAndPaginationForFilter(lastName, limit, offset);
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("Иванов", result.getFirst().getLastName());
-        verify(userRepository).findWithSortingAndPagination(lastName, limit, offset);
-    }
 }
