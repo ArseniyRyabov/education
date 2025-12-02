@@ -1,6 +1,7 @@
 package com.github.arseniyryabov.education.service;
 
 import com.github.arseniyryabov.education.controller.model.UserCreatingRequest;
+import com.github.arseniyryabov.education.controller.model.UserResponse;
 import com.github.arseniyryabov.education.entity.UserEntity;
 import com.github.arseniyryabov.education.exceptions.UserNotFoundException;
 import com.github.arseniyryabov.education.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -92,5 +94,22 @@ class UsersServiceTest {
         });
 
         verify(userRepository).findById(id);
+    }
+
+    @Test
+    public void testGetWithSortingAndPaginationForFilter() {
+        String lastName = "Иванов";
+        int limit = 10;
+        int offset = 0;
+        UserEntity user = new UserEntity(1L, "Иванов", "Иван", "Иванович");
+        when(userRepository.findWithSortingAndPagination(lastName, limit, offset))
+                .thenReturn(List.of(user));
+
+        List<UserResponse> result = usersService.getWithSortingAndPaginationForFilter(lastName, limit, offset);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Иванов", result.getFirst().getLastName());
+        verify(userRepository).findWithSortingAndPagination(lastName, limit, offset);
     }
 }
