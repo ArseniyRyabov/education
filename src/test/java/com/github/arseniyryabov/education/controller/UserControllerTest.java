@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.github.arseniyryabov.education.entity.UserEntity;
-import com.github.arseniyryabov.education.repository.UserRepository;
 import com.github.arseniyryabov.education.service.UsersService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.github.arseniyryabov.education.controller.model.UserCreatingRequest;
@@ -22,16 +23,14 @@ import java.util.List;
 
 public class UserControllerTest {
 
+    @Autowired
+    private MockMvc mockMvc;
+
     @Mock
     private UsersService usersService;
 
-    @Mock
-    private UserRepository userRepository;
-
     @InjectMocks
     private UserController userController;
-
-    private MockMvc mockMvc;
 
     private AutoCloseable closeable;
 
@@ -79,23 +78,22 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetSortingAndPagination() throws Exception {
-        String lastName = "Иванов";
-        int limit = 10;
-        int offset = 0;
-        List<UserEntity> users = Arrays.asList(
-                new UserEntity(1L, "Иванов", "Иван", "Иванович"),
-                new UserEntity(2L, "Петров", "Петр", "Петрович")
-        );
-        when(userRepository.findWithSortingAndPagination(lastName, limit, offset)).thenReturn(users);
+    public void testGetByFiltersWithPagination() throws Exception {
+        UserEntity user1 = new UserEntity(1L, "Иванов", "Иван", "Иванович");
+        UserEntity user2 = new UserEntity(2L, "Петров", "Петр", "Петрович");
+        List<UserEntity> users = Arrays.asList(user1, user2);
+
+        when(usersService.getByFiltersWithPagination("Иванов", 10, 0)).thenReturn(users);
 
         mockMvc.perform(get("/users")
-                        .param("lastName", lastName)
-                        .param("limit", String.valueOf(limit))
-                        .param("offset", String.valueOf(offset)))
+                        .param("lastName", "Иванов")
+                        .param("limit", "10")
+                        .param("offset", "0")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].userName").value("Иван"));
+                .andExpect(jsonPath("$[0].userName").value("Иван"))
+                .andExpect(jsonPath("$[1].userName").value("Петр"));
 
-        verify(userRepository).findWithSortingAndPagination(lastName, limit, offset);
+        verify(usersService).getByFiltersWithPagination("Иванов", 10, 0);
     }
 }

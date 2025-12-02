@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    @Query(value = "SELECT * FROM users WHERE LOWER(last_name) LIKE LOWER(CONCAT('%', :lastName, '%')) LIMIT :limit OFFSET :offset", nativeQuery = true)
-    List<UserEntity> findWithSortingAndPagination(@Param("lastName") String lastName,
+    @Query(value = "SELECT * FROM users WHERE (:lastName IS NULL OR LOWER(last_name) LIKE LOWER(CONCAT('%', :lastName, '%'))) LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<UserEntity> findWithPagination(@Param("lastName") String lastName,
                                                   @Param("limit") int limit,
                                                   @Param("offset") int offset);
 }

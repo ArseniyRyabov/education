@@ -1,6 +1,7 @@
 package com.github.arseniyryabov.education.service;
 
 import com.github.arseniyryabov.education.controller.model.UserCreatingRequest;
+import com.github.arseniyryabov.education.controller.model.UserResponse;
 import com.github.arseniyryabov.education.entity.UserEntity;
 import com.github.arseniyryabov.education.exceptions.UserNotFoundException;
 import com.github.arseniyryabov.education.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,4 +95,5 @@ class UsersServiceTest {
 
         verify(userRepository).findById(id);
     }
+
 }

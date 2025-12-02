@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.github.arseniyryabov.education.entity.UserEntity;
 import com.github.arseniyryabov.education.controller.model.UserCreatingRequest;
 
+import java.util.List;
+
 @Service
 public class UsersService {
     @Autowired
@@ -25,5 +27,9 @@ public class UsersService {
         return userRepository
                 .findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь с ID " + id + " не найден"));
+    }
+
+    public List<UserEntity> getByFiltersWithPagination(String lastName, int limit, int offset) {
+        return userRepository.findWithPagination(lastName, limit, offset);
     }
 }
